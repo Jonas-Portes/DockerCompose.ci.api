@@ -26,8 +26,14 @@ jobs:
       - run: yarn
       - run: yarn run test
 
+      - name: Generate tag
+        id: generate_tag
+        run: |
+          SHA=${echo $GIHUB_SHA | head -c7}
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
+
       - name: Build docker image
-        run: docker build -t rocket-ci-api:lastest .
+        run: docker build -t rocket-ci-api:${{steps.generate_tag.outputs.sha}} .
 
 
 
